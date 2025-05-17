@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sberny kos</title>
+  <title>Sberny kos - Cloud Sync</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-
     textarea {
       width: 100%;
       max-width: 500px;
     }
-
     button {
       margin-top: 10px;
       padding: 5px 15px;
@@ -21,26 +21,41 @@
   </style>
 </head>
 <body>
-  <h1>Sberny kos</h1>
+  <h1>Sberny koš (Cloud Sync)</h1>
 
   <label for="sberny_kos">Enter your text:</label><br>
-  <textarea id="sberny_kos" name="sberny_kos" rows="5" cols="50"></textarea>
+  <textarea id="sberny_kos" rows="5" cols="50" placeholder="Text is synced to cloud..."></textarea>
   <br>
   <button id="saveButton">Save</button>
 
   <script>
-    document.getElementById('saveButton').addEventListener('click', () => {
-      const my_text = document.getElementById('sberny_kos').value;
-      const my_blob = new Blob([my_text], { type: 'text/plain' });
-      const url = URL.createObjectURL(my_blob);
+// Your web app's Firebase configuration
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'sberny_kos.txt'; // File name
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url); // Clean up
+const firebaseConfig = {
+  apiKey: "AIzaSyCqFX8jivvTz3TVycFDMZoLV2nfFL-chqI",
+  authDomain: "sberny-kos.firebaseapp.com",
+  databaseURL: "https://sberny-kos-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sberny-kos",
+  storageBucket: "sberny-kos.firebasestorage.app",
+  messagingSenderId: "1038441857970",
+  appId: "1:1038441857970:web:8fee1ee5f08be841229aab"
+};
+
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const ref = db.ref("sberny_kos");
+
+    // Save to cloud when button is clicked
+    document.getElementById('saveButton').addEventListener('click', () => {
+      const text = document.getElementById('sberny_kos').value;
+      ref.set(text);
+    });
+
+    // Load data from cloud on page load
+    ref.on("value", snapshot => {
+      const text = snapshot.val();
+      document.getElementById('sberny_kos').value = text || "";
     });
   </script>
 </body>
