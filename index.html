@@ -29,6 +29,7 @@
   <label for="sberny_kos">Enter your text:</label><br>
   <textarea id="sberny_kos" rows="5" cols="50" placeholder="Text is synced to cloud..."></textarea>
   <br>
+  <button id="syncButton">Sync</button>
   <button id="saveButton">Save</button>
 
   <script>
@@ -49,7 +50,7 @@
     const ref = db.ref("sberny_kos");
 
     // Save to cloud when button is clicked
-    document.getElementById('saveButton').addEventListener('click', () => {
+    document.getElementById('syncButton').addEventListener('click', () => {
       const text = document.getElementById('sberny_kos').value;
       ref.set(text);
     });
@@ -59,7 +60,9 @@
       const text = snapshot.val();
       document.getElementById('sberny_kos').value = text || "";
     });
+    
   </script>
 
 </body>
 </html>
+
