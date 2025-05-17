@@ -49,7 +49,8 @@
     const db = firebase.database();
     const ref = db.ref("sberny_kos");
 
-    // Save to cloud when button is clicked
+    
+    // sync button
     document.getElementById('syncButton').addEventListener('click', () => {
       const text = document.getElementById('sberny_kos').value;
       ref.set(text);
@@ -59,6 +60,22 @@
     ref.on("value", snapshot => {
       const text = snapshot.val();
       document.getElementById('sberny_kos').value = text || "";
+    });
+
+    
+    // save button
+    document.getElementById('saveButton').addEventListener('click', () => {
+      const text = document.getElementById('sberny_kos').value;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sberny_kos.txt'; // File name
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url); // Clean up
     });
     
   </script>
